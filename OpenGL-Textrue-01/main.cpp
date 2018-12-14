@@ -206,10 +206,12 @@ void renderScene(void){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     modelViewMatrix.PushMatrix();
-     glBindTexture(GL_TEXTURE_2D, textures);
+    glBindTexture(GL_TEXTURE_2D, textures);
     
     M3DMatrix44f mcamera ;
+    //获取观察者矩阵
     cameraFrame.GetCameraMatrix(mcamera);
+    //观察者矩阵与模型矩阵相乘
     modelViewMatrix.MultMatrix(mcamera);
     
     M3DMatrix44f mject;
@@ -289,8 +291,9 @@ bool loadTagTexture(const char *tagname, GLenum minFilter, GLenum magFilter, GLe
     //参数4：加载纹理宽
     //参数5：加载纹理高
     //参数6：加载纹理的深度
-    //参数7：像素数据的数据类型（GL_UNSIGNED_BYTE，每个颜色分量都是一个8位无符号整数）
-    //参数8：指向纹理图像数据的指针
+    //参数7：文件格式地址
+    //参数8：像素数据的数据类型（GL_UNSIGNED_BYTE，每个颜色分量都是一个8位无符号整数）
+    //参数9：指向纹理图像数据的指针
     glTexImage2D(GL_TEXTURE_2D, 0, components, width, height, 0, format, GL_UNSIGNED_BYTE, pBytes);
     
     /*释放纹理数据*/
@@ -322,6 +325,7 @@ void setup(void){
     
     shaderManager.InitializeStockShaders();
     
+
     //初始化纹理对象
     //参数1：纹理个数
     //参数2：纹理对象指针
@@ -370,6 +374,8 @@ int main(int argc,  char * argv[]) {
     setup();
     glutMainLoop();
     
+    
+    //删除纹理
     glDeleteTextures(1, &textures);
     return 0;
 }
